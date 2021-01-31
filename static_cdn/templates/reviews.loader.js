@@ -211,20 +211,29 @@ sheet.innerHTML = `
   #reviewsProof .reviews-proof-text img {
     position: absolute;
   }
+  {%for prof in campain.proofs.all %}
+    document.querySelector('#reviews-proof-hidden-{{prof.id}}').background = "url({{prof.image.url}}) no-repeat -9999px -9999px";
+  {%endfor%}
   /*# sourceMappingURL=load-campain-styles.css.map */`
 document.body.append(sheet);
 
 const root = document.createElement('div');
 root.setAttribute('id', 'reviewsProof');
 
+
 const reviewsStartDelay = {{campain.startDelay}};
 const reviewsDisplayTime = {{campain.displayTime}};
 const reviewsHideTime = {{campain.hideTime}};
 
+var reviewsAllImages = [] // use for preload iamges
+
 var proofsHtml = []; 
 {%for prof in campain.proofs.all %}
-
+debugger;
+    var img=new Image();
+    img.src="{{prof.image.url}}"
     proofsHtml.push(`
+                <div id="reviews-proof-hidden-{{prof.id}}"></div>
                 <div class="reviews-proof-img">
                     <img src="{{prof.image.url}}"
                         alt="">
@@ -237,6 +246,7 @@ var proofsHtml = [];
             </div>
             `);
 {% endfor %}
+
 
 initLoop();
 
