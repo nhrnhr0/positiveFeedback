@@ -1,11 +1,18 @@
 from django.db import models
 from colorfield.fields import ColorField
 from django.utils.translation import gettext as _
+from django.conf import settings
 
 # Create your models here.
 
 
 class Proof(models.Model):
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
     image = models.ImageField(upload_to="proofs")
     title = models.CharField(max_length=80)
     time = models.CharField(max_length=50, blank=True)
@@ -17,6 +24,7 @@ class Proof(models.Model):
     
     
 class Campain(models.Model):
+    
     BIG_CIRCLE_IMAGE = '0'
     LAYOUT_CHOICES = [
         (BIG_CIRCLE_IMAGE, 'big circle image'),
@@ -42,6 +50,8 @@ class Campain(models.Model):
         (RIGHT_BOTTOM, 'right bottom'),
         (RIGHT_TOP, 'right top'),
     ]
+
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,null=True,blank=True,)
     name = models.CharField(blank=False, verbose_name=_('name'), max_length=120)
     isActive = models.BooleanField(verbose_name="active", default=False)
     url = models.URLField(verbose_name="url")
