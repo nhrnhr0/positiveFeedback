@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from core.views import testIndexView,generateReview, profileView, campainView,delCampainView
+from core.views import testIndexView,generateReview ,profileView, campainView,delCampainView, profView, addProf,delProfView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -28,6 +28,9 @@ urlpatterns = [
     path('campain/', campainView),
     path('campain/<int:id>', campainView),
     path('campain/del/<int:id>/', delCampainView),
+    #path('prof/', profView),
+    path('prof/del/<int:id>/', delProfView),
+    path('addProf', addProf)
 ]
 if settings.DEBUG:
     urlpatterns= urlpatterns + static(settings.MEDIA_URL, document_root= settings.MEDIA_ROOT)

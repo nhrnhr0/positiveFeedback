@@ -10,7 +10,8 @@ class CampainForm(ModelForm):
         exclude = ['owner', 'proofs']
 
 from .models import Proof
-class ProofForm(ModelForm):
+class ProfForm(ModelForm):
     class Meta:
         model = Proof
         fields = '__all__'
+        exclude = ['owner',]

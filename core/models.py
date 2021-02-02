@@ -10,10 +10,9 @@ class Proof(models.Model):
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        null=True,
-        blank=True,
+        #null=True,blank=True,
     )
-    image = models.ImageField(upload_to="proofs")
+    image = models.ImageField(upload_to="proofs", blank=True, null=True)
     title = models.CharField(max_length=80)
     time = models.CharField(max_length=50, blank=True)
     message = models.CharField(max_length=200)
@@ -51,7 +50,7 @@ class Campain(models.Model):
         (RIGHT_TOP, 'right top'),
     ]
 
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,null=True,blank=True,)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)#,null=True,blank=True,)
     name = models.CharField(blank=False, verbose_name=_('name'), max_length=120)
     isActive = models.BooleanField(verbose_name="active", default=False)
     url = models.URLField(verbose_name="url")

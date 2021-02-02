@@ -19,9 +19,9 @@
 
 
     <div class="tab">
-        <button class="tablinks" onclick="openTab(event, 'Campains')" id="defaultOpen">Campains</button>
-        <button class="tablinks" onclick="openTab(event, 'Reviews')">Reviews</button>
-        <button class="tablinks" onclick="openTab(event, 'Account')">Account</button>
+        <button class="tablinks" name="tab_campains" onclick="openTab(event, 'Campains')" id="defaultOpen">Campains</button>
+        <button class="tablinks" name="tab_reviews" onclick="openTab(event, 'Reviews')">Reviews</button>
+        <button class="tablinks" name="tab_account" onclick="openTab(event, 'Account')">Account</button>
     </div>
 
     <div id="Campains" class="tabcontent">
@@ -63,8 +63,61 @@
       </div>
       
       <div id="Reviews" class="tabcontent">
-        <h3>Paris</h3>
-        <p>Paris is the capital of France.</p> 
+        <h3>Reviews</h3>
+        <div id="addProfModel" class="modal">
+            <form method="POST" action="/addProf" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="id">
+                <img class="prof-table-image" id="displayImage" src="">
+                {{profForm.as_p}}
+                <input type="submit" value="SAVE">
+                <button onclick="closeProfModal(event)">close</button>
+            </form>
+        </div>
+
+
+        <table id="reviewsTable">
+            <thead>
+                <tr>
+                    <td>Uid</td>
+                    <td>image</td>
+                    <td>title</td>
+                    <td>time</td>
+                    <td>message</td>
+                    <td>
+                        <input type='button'value='new' class="btn" onclick="fillAndOpenProfModel();" />
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                {%for prof in proofs.all %}
+                    <tr>
+                        <td>
+                            {{prof.id}}
+                        </td>
+                        <td>
+                            <img class="prof-table-image" 
+                            src="{% if prof.image %}{{prof.image.url}}{% endif %}">
+                        </td>
+                        <td>
+                            {{prof.title}}
+                        </td>
+                        <td>
+                            {{prof.time}}
+                        </td>
+                        <td>
+                            {{prof.message}}
+                        </td>
+                        <td>
+                            <input type='button'value='edit' class="btn" onclick="fillAndOpenProfModel('{{prof.id}}', '{% if prof.image %}{{prof.image.url}}{%endif%}','{{prof.title}}','{{prof.time}}', '{{prof.message}}');" />
+                            <input type='button'value='delete' class="btn" onclick="document.location.href='/prof/del/{{prof.id}}'" />
+                        </td>
+
+                    </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+
       </div>
       
       <div id="Account" class="tabcontent">

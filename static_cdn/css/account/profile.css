@@ -1,3 +1,6 @@
+/*.modal {
+    position: absolute;
+}*/
 .tab {
   float: left;
   border: 1px solid #ccc;
@@ -52,6 +55,34 @@
 }
 
 #campainsTable td {
+  border-left: 1px solid rgba(0, 0, 0, 0.2);
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 1.5em;
+}
+
+.prof-table-image {
+  border-radius: 999999px;
+  height: 75px;
+  width: 75px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+#reviewsTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+#reviewsTable thead {
+  border-bottom: 1px black solid;
+}
+
+#reviewsTable tr {
+  border-bottom: 1px #333333 dashed;
+}
+
+#reviewsTable td {
   border-left: 1px solid rgba(0, 0, 0, 0.2);
   border-right: 1px solid rgba(0, 0, 0, 0.2);
   padding: 1.5em;
