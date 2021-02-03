@@ -211,15 +211,40 @@ sheet.innerHTML = `
   #reviewsProof .reviews-proof-text img {
     position: absolute;
   }
-  {%for prof in campain.proofs.all %}
-    document.querySelector('#reviews-proof-hidden-{{prof.id}}').background = "url({{ SITE_URL }}/{{prof.image.url}}) no-repeat -9999px -9999px";
-  {%endfor%}
+  
+
+  #reviewsProof[data-direction='rtl'] .reviews-proof-img {
+      left: 75%;
+
+  }
+  #reviewsProof[data-direction='rtl'] .reviews-proof-text {
+      direction:rtl;
+  }
+  #reviewsProof[data-direction='rtl'] .reviews-proof-text h3{
+    margin: 0 70px 0 10px !important;
+  }
+  #reviewsProof[data-direction='rtl'] .reviews-proof-text h4{
+    margin: 0 80px 0 0px !important;
+  }
+
+  #reviewsProof[data-direction='rtl'] .reviews-proof-text h5{
+    margin: 0 80px 0 0px !important;
+  }
+
+  #reviewsProof[data-direction='rtl'] .reviews-proof-text #close-proofs {
+    right: unset;
+    left: 10px;
+  }
+
   /*# sourceMappingURL=load-campain-styles.css.map */`
 document.body.append(sheet);
+/*{%for prof in campain.proofs.all %}
+    document.querySelector('#reviews-proof-hidden-{{prof.id}}').background = "url({{ SITE_URL }}/{{prof.image.url}}) no-repeat -9999px -9999px";
+{%endfor%}*/
 
 const root = document.createElement('div');
 root.setAttribute('id', 'reviewsProof');
-
+root.dataset.direction = '{{campain.direction}}';
 
 const reviewsStartDelay = {{campain.startDelay}};
 const reviewsDisplayTime = {{campain.displayTime}};
@@ -233,7 +258,7 @@ debugger;
     var img=new Image();
     img.src="{{ SITE_URL }}/{{prof.image.url}}"
     proofsHtml.push(`
-                <div id="reviews-proof-hidden-{{prof.id}}"></div>
+                <div id="reviews-proof-hidden-{{prof.id}}" style="background:url({{ SITE_URL }}/{{prof.image.url}}) no-repeat -9999px -9999px;"></div>
                 <div class="reviews-proof-img">
                     <img src="{{ SITE_URL }}/{{prof.image.url}}"
                         alt="">

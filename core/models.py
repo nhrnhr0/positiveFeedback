@@ -50,10 +50,18 @@ class Campain(models.Model):
         (RIGHT_TOP, 'right top'),
     ]
 
+    DIR_LTR = 'ltr'
+    DIR_RTL = 'rtl'
+    DIRECTION_CHOICES = [
+        (DIR_LTR, 'left to right'),
+        (DIR_RTL, 'right to left'),
+    ]
+
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)#,null=True,blank=True,)
     name = models.CharField(blank=False, verbose_name=_('name'), max_length=120)
     isActive = models.BooleanField(verbose_name="active", default=False)
     url = models.URLField(verbose_name="url")
+    direction = models.CharField(max_length=3, choices=DIRECTION_CHOICES, default=DIR_LTR)
 
     startDelay = models.IntegerField(verbose_name="start delay", default=5)
     displayTime = models.IntegerField(verbose_name="display time", default=10)
