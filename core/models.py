@@ -29,9 +29,14 @@ class Campain(models.Model):
         (BIG_CIRCLE_IMAGE, 'big circle image'),
     ]
 
-    SLIDE_IN = '0'
+    
+    SLIDE_IN_RIGHT = 'slide_right'
+    SLIDE_IN_LEFT = 'slide_left'
+    SLIDE_IN_BOTTOM = 'slide_bottom'
     TRANSITION_IN_CHOICES = [
-        (SLIDE_IN, 'slide in'),
+        (SLIDE_IN_RIGHT, 'slide in right'),
+        (SLIDE_IN_LEFT, 'slide in left'),
+        (SLIDE_IN_BOTTOM, 'slide in bottom'),
     ]
 
     SLIDE_OUT = '0'
@@ -69,7 +74,7 @@ class Campain(models.Model):
 
 
     layout = models.CharField(max_length=1, choices=LAYOUT_CHOICES, default=BIG_CIRCLE_IMAGE)
-    transitionIn = models.CharField(max_length=1, choices=TRANSITION_IN_CHOICES, default=SLIDE_IN)
+    transitionIn = models.CharField(max_length=20, choices=TRANSITION_IN_CHOICES, default=SLIDE_IN_RIGHT)
     transitionOut = models.CharField(max_length=1, choices=TRANSITION_OUT_CHOICES, default=SLIDE_OUT)
 
     position = models.CharField(max_length=1, choices=POSITION_CHOICES, default=LEFT_BOTTOM)

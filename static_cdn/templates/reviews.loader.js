@@ -15,7 +15,6 @@ var positionStyle='';
     bottom: ${reviewsYOffset};
     top: calc(11px + auto);
  */
-debugger;
 switch(reviewsPosition) {
     case "0": // left-bottom
         positionStyle = `left: calc(30px + ${reviewsXOffset});
@@ -71,30 +70,83 @@ sheet.innerHTML = `
         opacity: 0;
     }
 }
-@keyframes slideInAnimation {
-    0%{
-        transform: skewX(53deg) translateX(-500px);
-        opacity: 0;
+
+{%if campain.transitionIn == 'slide_right' %}
+    @keyframes slideInAnimation {
+        0%{
+            transform: skewX(53deg) translateX(-500px);
+            opacity: 0;
+        }
+        60% {
+            transform: translateX(0px);
+        }
+        62% {
+            transform: skew(0deg) translateX(30px);
+        }
+        70% {
+            transform: skew(-20deg);
+        }
+        80% {
+            transform: skew(0deg) translate(0);
+        }
+        90% {
+            transform: skew(-5deg);
+        }
+        100% {
+            transform: skew(0deg);
+        }
     }
-    60% {
-        transform: translateX(0px);
+    {%elif campain.transitionIn == 'slide_left' %}
+    @keyframes slideInAnimation {
+        0%{
+            transform: skewX(53deg) translateX(500px);
+            opacity: 0;
+        }
+        60% {
+            transform: translateX(0px);
+        }
+        62% {
+            transform: skew(0deg) translateX(-30px);
+        }
+        70% {
+            transform: skew(-20deg);
+        }
+        80% {
+            transform: skew(0deg) translate(0);
+        }
+        90% {
+            transform: skew(-5deg);
+        }
+        100% {
+            transform: skew(0deg);
+        }
     }
-    62% {
-        transform: skew(0deg) translateX(30px);
+    {%elif campain.transitionIn == 'slide_bottom' %}
+    @keyframes slideInAnimation {
+        0%{
+            transform: skewY(53deg) translateY(500px);
+            opacity: 0;
+        }
+        60% {
+            transform: translateX(0px);
+        }
+        62% {
+            transform: skew(0deg) translateY(-10px);
+        }
+        70% {
+            transform: skew(-5deg);
+        }
+        80% {
+            transform: skew(0deg) translate(0);
+        }
+        90% {
+            transform: skew(-5deg);
+        }
+        100% {
+            transform: skew(0deg);
+        }
     }
-    70% {
-        transform: skew(-20deg);
-    }
-    80% {
-        transform: skew(0deg) translate(0);
-    }
-    90% {
-        transform: skew(-5deg);
-    }
-    100% {
-        transform: skew(0deg);
-    }
-}
+    {%endif%}
 .slideIn {
     animation:slideInAnimation;
 }
@@ -245,7 +297,6 @@ document.body.append(sheet);
 const root = document.createElement('div');
 root.setAttribute('id', 'reviewsProof');
 root.dataset.direction = '{{campain.direction}}';
-
 const reviewsStartDelay = {{campain.startDelay}};
 const reviewsDisplayTime = {{campain.displayTime}};
 const reviewsHideTime = {{campain.hideTime}};
@@ -254,7 +305,6 @@ var reviewsAllImages = [] // use for preload iamges
 
 var proofsHtml = []; 
 {%for prof in campain.proofs.all %}
-debugger;
     var img=new Image();
     img.src="{{ SITE_URL }}/{{prof.image.url}}"
     proofsHtml.push(`
