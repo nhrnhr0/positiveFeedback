@@ -26,11 +26,11 @@ SECRET_KEY = '1hf^^k!_*k0b*9@e*gv*21gdv&edug^riqx3i2+04spua4y5x9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['3.133.203.236']
 
 
 # Application definition
-SITE_URL = 'http://127.0.0.1' # this will reduce the Sites framework db call.
+SITE_URL = 'http://3.133.203.236' # this will reduce the Sites framework db call.
 
 INSTALLED_APPS = [
     #system
