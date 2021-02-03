@@ -212,7 +212,7 @@ sheet.innerHTML = `
     position: absolute;
   }
   {%for prof in campain.proofs.all %}
-    document.querySelector('#reviews-proof-hidden-{{prof.id}}').background = "url({{prof.image.url}}) no-repeat -9999px -9999px";
+    document.querySelector('#reviews-proof-hidden-{{prof.id}}').background = "url({{ SITE_URL }}/{{prof.image.url}}) no-repeat -9999px -9999px";
   {%endfor%}
   /*# sourceMappingURL=load-campain-styles.css.map */`
 document.body.append(sheet);
@@ -231,7 +231,7 @@ var proofsHtml = [];
 {%for prof in campain.proofs.all %}
 debugger;
     var img=new Image();
-    img.src="{{prof.image.url}}"
+    img.src="{{ SITE_URL }}/{{prof.image.url}}"
     proofsHtml.push(`
                 <div id="reviews-proof-hidden-{{prof.id}}"></div>
                 <div class="reviews-proof-img">
