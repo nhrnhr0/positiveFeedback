@@ -102,13 +102,21 @@ def campainView(request, id=-1):
             campain.owner = request.user
             campainForm.save()
             messages.add_message(request, messages.SUCCESS, 'campain added')
+
+            # load profs for the campain
+            campainProfs = [i for i in request.POST if i.startswith('profs-checkbox-')]
+            campainProfs = map(lambda i: i.replace('profs-checkbox-',''),campainProfs)
+            campain.proofs.set(campainProfs)
             print('redirecting')
             return redirect('/accounts/profile#campain')
     else:
-        #edit campain
+        # send edit campain
         if camp and camp.owner == request.user:
             campainForm = CampainForm(instance=camp)
-        #new campain
+        # send new campain
         else:
             campainForm = CampainForm()
-        return render(request, 'campains.html', {'campainForm':campainForm})
+        
+        profs = Proof.objects.filter(owner= request.user)
+        return render(request, 'campains.html', {'campainForm':campainForm,
+                                                'profs':profs})

@@ -74,4 +74,4 @@ class Campain(models.Model):
     textColor = ColorField(default="#333333")
     customCSS = models.TextField(verbose_name="custom css", blank=True)
 
-    proofs = models.ManyToManyField(to=Proof)
+    proofs = models.ManyToManyField(to=Proof, related_name='camp')

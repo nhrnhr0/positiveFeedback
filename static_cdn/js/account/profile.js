@@ -3,6 +3,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 function openTab(evt, tabId) {
   debugger;
+    window.location.hash = tabId;
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
     for (i = 0; i < tabcontent.length; i++) {

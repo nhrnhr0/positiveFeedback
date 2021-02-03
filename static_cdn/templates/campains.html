@@ -1,15 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
+    {%load static%}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{%static 'css\campains.css' %}">
     <title>my campains</title>
 </head>
 <body>
     <form method="POST" action="">
+    <div class="campainForm">
         {% csrf_token %}
-        {{campainForm.as_p}}
-        <input type="submit" value="SAVE">
+        <div>
+            {{campainForm.as_p}}
+        </div>
+        <div>
+            {%for prof in profs.all %}
+            <div class="profs-list">
+                
+                <div class="profs-checkbox-container">
+                    {%if campainForm.instance in prof.camp.all %}
+                        <input type="checkbox" name="profs-checkbox-{{prof.id}}" id="profs-checkbox-{{prof.id}}"checked>
+                    {%else%}
+                        <input type="checkbox" name="profs-checkbox-{{prof.id}}" id="profs-checkbox-{{prof.id}}">
+                    {%endif%}
+                    
+                    <!--
+                    {%for c in prof.camp.all %}
+
+                            {%if c.id == campainForm.instance.id %}
+                            {%endif%}
+                    {%endfor%}
+                    
+                    -->
+                </div>
+                <div>
+                    <div id="reviewsProof">
+                        <div id="reviews-proof-hidden-{{prof.id}}"></div>
+                        <div class="reviews-proof-img">
+                            <img src="{{prof.image.url}}"
+                                alt="">
+                        </div>
+                        <div class="reviews-proof-text"><span id="close-proofs" class="close">X</span>
+                            <h3>{{prof.title}}</h3>
+                            <h4>{{prof.message}}</h4>
+                            <h5>{{prof.time}}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {%endfor%}
+        </div>
+    </div>
+    <input type="submit" value="SAVE">
+    
+        
     </form>
 </body>
 </html>

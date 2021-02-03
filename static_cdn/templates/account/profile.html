@@ -33,6 +33,8 @@
                     <td>Name</td>
                     <td>Domain</td>
                     <td>Active</td>
+                    <td>reviews</td>
+                    <td>link</td>
                     <td><input type='button'value='new' class="btn" onclick="document.location.href='/campain/'" /></td>
                 </tr>
             </thead>
@@ -50,6 +52,12 @@
                         </td>
                         <td>
                             {{camp.isActive}}
+                        </td>
+                        <td>
+                            {{camp.proofs.count}}
+                        </td>
+                        <td>
+                            <code>&lt;script type="text/javascript" src="{{ SITE_URL }}/load-campain/{{camp.id}}"&gt;&lt;/script&gt;</code>
                         </td>
                         <td>
                             <input type='button'value='edit' class="btn" onclick="document.location.href='/campain/{{camp.id}}'" />
