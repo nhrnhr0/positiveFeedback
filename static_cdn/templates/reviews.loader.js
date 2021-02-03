@@ -235,7 +235,7 @@ debugger;
     proofsHtml.push(`
                 <div id="reviews-proof-hidden-{{prof.id}}"></div>
                 <div class="reviews-proof-img">
-                    <img src="{{prof.image.url}}"
+                    <img src="{{ SITE_URL }}/{{prof.image.url}}"
                         alt="">
                 </div>
                 <div class="reviews-proof-text"><span id="close-proofs" class="close">X</span>
