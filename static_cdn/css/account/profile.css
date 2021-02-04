@@ -38,8 +38,6 @@
   width: 70%;
   border-left: none;
   min-height: 300px;
-  max-height: 500px;
-  overflow-y: scroll;
 }
 
 #campainsTable {
@@ -68,6 +66,10 @@
   width: 75px;
   -o-object-fit: cover;
      object-fit: cover;
+}
+
+.prof-table-image-logo {
+  height: 25px;
 }
 
 #reviewsTable {

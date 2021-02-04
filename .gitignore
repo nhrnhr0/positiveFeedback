@@ -3,3 +3,4 @@
 *.pyc
 env/
 static/*
+db.sqlite3

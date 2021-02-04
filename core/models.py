@@ -13,10 +13,12 @@ class Proof(models.Model):
         #null=True,blank=True,
     )
     image = models.ImageField(upload_to="proofs", blank=True, null=True)
-    title = models.CharField(max_length=80)
+    title = models.CharField(max_length=250)
     time = models.CharField(max_length=50, blank=True)
-    message = models.CharField(max_length=200)
+    message = models.CharField(max_length=500)
     logo = models.ImageField(upload_to="logos", blank=True)
+    stars = models.FloatField(verbose_name="starts (-1 to deactivate)", default=4.5)
+    link = models.URLField(verbose_name="link", null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -33,15 +35,23 @@ class Campain(models.Model):
     SLIDE_IN_RIGHT = 'slide_right'
     SLIDE_IN_LEFT = 'slide_left'
     SLIDE_IN_BOTTOM = 'slide_bottom'
+    SLIDE_IN_UP = 'slide_up'
     TRANSITION_IN_CHOICES = [
         (SLIDE_IN_RIGHT, 'slide in right'),
         (SLIDE_IN_LEFT, 'slide in left'),
         (SLIDE_IN_BOTTOM, 'slide in bottom'),
+        (SLIDE_IN_UP, 'slide in up')
     ]
 
-    SLIDE_OUT = '0'
+    SLIDE_OUT_RIGHT = 'slide_right'
+    SLIDE_OUT_LEFT = 'slide_left'
+    SLIDE_OUT_DOWN = 'slide_down'
+    SLIDE_OUT_UP = 'slide_up'
     TRANSITION_OUT_CHOICES = [
-        (SLIDE_OUT, 'slide out'),
+        (SLIDE_OUT_RIGHT, 'slide out right'),
+        (SLIDE_OUT_LEFT, 'slide out left'),
+        (SLIDE_OUT_DOWN, 'slide out down'),
+        (SLIDE_OUT_UP, 'slide out up'),
     ]
 
     LEFT_BOTTOM = '0'
@@ -75,7 +85,7 @@ class Campain(models.Model):
 
     layout = models.CharField(max_length=1, choices=LAYOUT_CHOICES, default=BIG_CIRCLE_IMAGE)
     transitionIn = models.CharField(max_length=20, choices=TRANSITION_IN_CHOICES, default=SLIDE_IN_RIGHT)
-    transitionOut = models.CharField(max_length=1, choices=TRANSITION_OUT_CHOICES, default=SLIDE_OUT)
+    transitionOut = models.CharField(max_length=20, choices=TRANSITION_OUT_CHOICES, default=SLIDE_OUT_RIGHT)
 
     position = models.CharField(max_length=1, choices=POSITION_CHOICES, default=LEFT_BOTTOM)
     xOffset = models.CharField(max_length=20, default="10px")

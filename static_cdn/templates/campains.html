@@ -34,8 +34,8 @@
                     
                     -->
                 </div>
-                <div>
-                    <div id="reviewsProof">
+                <div style="display:flex;">
+                    <div id="reviewsProof2">
                         <div id="reviews-proof-hidden-{{prof.id}}"></div>
                         <div class="reviews-proof-img">
                             <img src="{{prof.image.url}}"
@@ -46,15 +46,19 @@
                             <h4>{{prof.message}}</h4>
                             <h5>{{prof.time}}</h5>
                         </div>
+                        
                     </div>
+                    <a href="/accounts/profile?review={{prof.id}}#Reviews">edit</a>
+                    
                 </div>
             </div>
             {%endfor%}
         </div>
     </div>
-    <input type="submit" value="SAVE">
-    
-        
+    <input type="submit" name="save" value="SAVE">
+    <input type="submit" name="saveContinue" value="SAVE and continue editing">
+    <button onclick="document.location.href = '/accounts/profile#Campains';return false;">back</button>
     </form>
 </body>
+    <script type="text/javascript" src="/load-campain/{{campainForm.instance.id}}" defer></script>	
 </html>

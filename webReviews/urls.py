@@ -25,6 +25,7 @@ urlpatterns = [
     path('load-campain/<int:id>', generateReview),
     path('accounts/', include('allauth.urls')),
     path('accounts/profile/', profileView),
+    path('accounts/profile/<int:review>', profileView),
     path('campain/', campainView),
     path('campain/<int:id>', campainView),
     path('campain/del/<int:id>/', delCampainView),

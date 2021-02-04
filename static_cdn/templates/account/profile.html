@@ -34,7 +34,7 @@
                     <td>Domain</td>
                     <td>Active</td>
                     <td>reviews</td>
-                    <td>link</td>
+                    <td>code</td>
                     <td><input type='button'value='new' class="btn" onclick="document.location.href='/campain/'" /></td>
                 </tr>
             </thead>
@@ -61,7 +61,7 @@
                         </td>
                         <td>
                             <input type='button'value='edit' class="btn" onclick="document.location.href='/campain/{{camp.id}}'" />
-                            <input type='button'value='delete' class="btn" onclick="document.location.href='/campain/del/{{camp.id}}'" />
+                            <input type='button'value='delete' class="btn" onclick="deleteCampain({{camp.id}})"  /> <!-- '" -->
                         </td>
 
                     </tr>
@@ -69,7 +69,16 @@
             </tbody>
         </table>
       </div>
-      
+      <div id="deleteModal" class="modal" >
+          <div>
+              Are you sure you want to delete?
+          </div>
+          <div>
+              <button onclick="document.location.href=document.getElementById('deleteModal').dataset.delurl;" id="deleteYES">YES</button>
+              <button onclick="$.modal.close();" id="deleteNO" >NO</button>
+          </div>
+
+      </div>
       <div id="Reviews" class="tabcontent">
         <h3>Reviews</h3>
         <div id="addProfModel" class="modal">
@@ -77,6 +86,7 @@
                 {% csrf_token %}
                 <input type="hidden" name="id">
                 <img class="prof-table-image" id="displayImage" src="">
+                <img class="prof-table-image-logo" id="displayImageLogo" src="">
                 {{profForm.as_p}}
                 <input type="submit" value="SAVE">
                 <button onclick="closeProfModal(event)">close</button>
@@ -117,8 +127,8 @@
                             {{prof.message}}
                         </td>
                         <td>
-                            <input type='button'value='edit' class="btn" onclick="fillAndOpenProfModel('{{prof.id}}', '{% if prof.image %}{{prof.image.url}}{%endif%}','{{prof.title}}','{{prof.time}}', '{{prof.message}}');" />
-                            <input type='button'value='delete' class="btn" onclick="document.location.href='/prof/del/{{prof.id}}'" />
+                            <input name="profEdit{{prof.id}}" type='button'value='edit' class="btn" onclick="fillAndOpenProfModel('{{prof.id}}', '{% if prof.image %}{{prof.image.url}}{%endif%}','{{prof.title}}','{{prof.time}}', '{{prof.message}}', {{prof.stars}}, '{{prof.link}}','{% if prof.logo %}{{prof.logo.url}}{%endif%}' );" />
+                            <input type='button'value='delete' class="btn" onclick="deleteProf({{prof.id}})" />
                         </td>
 
                     </tr>

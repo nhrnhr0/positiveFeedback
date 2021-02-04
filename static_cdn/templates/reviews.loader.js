@@ -46,6 +46,10 @@ switch(reviewsPosition) {
 console.log('positionStyle', positionStyle);
 
 sheet.innerHTML = `
+:#reviewsProof {
+    background-color: red;
+}
+{%if campain.transitionOut == 'slide_left' %}
 @keyframes slideOutAnimation {
     0% {
         transform: skew(0deg);
@@ -70,6 +74,82 @@ sheet.innerHTML = `
         opacity: 0;
     }
 }
+{%elif campain.transitionOut == 'slide_right' %}
+@keyframes slideOutAnimation {
+    0% {
+        transform: skew(0deg);
+    }
+    10% {
+        transform: skew(-5deg);
+    }
+    20% {
+        transform: skew(0deg) translate(0);
+    }
+    30% {
+        transform: skew(-20deg);
+    }
+    38% {
+        transform: skew(0deg) translateX(30px);
+    }
+    40% {
+        transform: translateX(0px);
+    }
+    100%{
+        transform: skewX(53deg) translateX(500px);
+        opacity: 0;
+    }
+}
+{%elif campain.transitionOut == 'slide_down' %}
+@keyframes slideOutAnimation {
+    0% {
+        transform: skew(0deg);
+    }
+    10% {
+        transform: skew(-5deg);
+    }
+    20% {
+        transform: skew(0deg) translate(0);
+    }
+    30% {
+        transform: skew(-20deg);
+    }
+    38% {
+        transform: skew(0deg) translateY(0px);
+    }
+    40% {
+        transform: translateX(0px);
+    }
+    100%{
+        transform: skewX(0deg) translateY(500px);
+        opacity: 0;
+    }
+}
+{%elif campain.transitionOut == 'slide_up' %}
+@keyframes slideOutAnimation {
+    0% {
+        transform: skew(0deg);
+    }
+    10% {
+        transform: skew(-5deg);
+    }
+    20% {
+        transform: skew(0deg) translate(0);
+    }
+    30% {
+        transform: skew(-20deg);
+    }
+    38% {
+        transform: skew(0deg) translateY(0px);
+    }
+    40% {
+        transform: translateX(0px);
+    }
+    100%{
+        transform: skewX(0deg) translateY(-500px);
+        opacity: 0;
+    }
+}
+{%endif%}
 
 {%if campain.transitionIn == 'slide_right' %}
     @keyframes slideInAnimation {
@@ -132,6 +212,31 @@ sheet.innerHTML = `
         }
         62% {
             transform: skew(0deg) translateY(-10px);
+        }
+        70% {
+            transform: skew(-5deg);
+        }
+        80% {
+            transform: skew(0deg) translate(0);
+        }
+        90% {
+            transform: skew(-5deg);
+        }
+        100% {
+            transform: skew(0deg);
+        }
+    }
+    {%elif campain.transitionIn == 'slide_up' %}
+    @keyframes slideInAnimation {
+        0%{
+            transform: skewY(53deg) translateY(-500px);
+            opacity: 0;
+        }
+        60% {
+            transform: translateX(0px);
+        }
+        62% {
+            transform: skew(0deg) translateY(10px);
         }
         70% {
             transform: skew(-5deg);
@@ -251,20 +356,48 @@ sheet.innerHTML = `
   #reviewsProof .reviews-proof-text h5 {
     color: #999;
     display: block;
-    font-size: 12px !important;
-    line-height: 12px !important;
-    margin: 0 0 0 80px !important;
+    font-size: 15px !important;
+    line-height: 15px !important;
+    margin: 0 0 0 170px !important;
     padding: 0 !important;
     position: absolute;
     bottom: 5px;
     width: 60%;
     font-weight: normal !important;
   }
-  #reviewsProof .reviews-proof-text img {
+  #reviewsProof .reviews-proof-text .logo-img {
     position: absolute;
+    height: 25px;
+    right: 20px;
+    bottom: 4px;
+  }
+
+  #reviewsProof .reviews-proof-text .Stars {
+    --star-size: 20px;
+    --star-color: #fff;
+    --star-background: #fc0;
+    --percent: calc(var(--rating) / 5 * 100%);
+    position: absolute;
+    bottom: 3px;
+    left: 68px;
+    display: inline-block;
+    font-size: var(--star-size);
+    font-family: Times;
+    line-height: 1;
+  }
+  #reviewsProof .reviews-proof-text .Stars::before {
+      content: '★★★★★';
+      letter-spacing: 3px;
+      background: linear-gradient(90deg, var(--star-background) var(--percent), var(--star-color) var(--percent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
   }
   
-
+  #reviewsProof[data-direction='rtl'] .reviews-proof-text .logo-img {
+      right: auto;
+      left: 20px;
+  }
   #reviewsProof[data-direction='rtl'] .reviews-proof-img {
       left: 75%;
 
@@ -280,7 +413,7 @@ sheet.innerHTML = `
   }
 
   #reviewsProof[data-direction='rtl'] .reviews-proof-text h5{
-    margin: 0 80px 0 0px !important;
+    margin: 0 170px 0 0px !important;
   }
 
   #reviewsProof[data-direction='rtl'] .reviews-proof-text #close-proofs {
@@ -306,17 +439,29 @@ var reviewsAllImages = [] // use for preload iamges
 var proofsHtml = []; 
 {%for prof in campain.proofs.all %}
     var img=new Image();
-    img.src="{{ SITE_URL }}/{{prof.image.url}}"
+    img.src="{{ SITE_URL }}{{prof.image.url}}"
     proofsHtml.push(`
-                <div id="reviews-proof-hidden-{{prof.id}}" style="background:url({{ SITE_URL }}/{{prof.image.url}}) no-repeat -9999px -9999px;"></div>
+                <div id="reviews-proof-hidden-{{prof.id}}" style="background:url({{ SITE_URL }}{{prof.image.url}}) no-repeat -9999px -9999px;"></div>
                 <div class="reviews-proof-img">
-                    <img src="{{ SITE_URL }}/{{prof.image.url}}"
+                    <img src="{{ SITE_URL }}{{prof.image.url}}"
                         alt="">
                 </div>
                 <div class="reviews-proof-text"><span id="close-proofs" class="close">X</span>
                     <h3>{{prof.title}}</h3>
                     <h4>{{prof.message}}</h4>
                     <h5>{{prof.time}}</h5>
+                    <div class="Stars" style="--rating: {{prof.starts}};
+                     {%if prof.starts == -1%}
+                        display:none;
+                    {%endif%}
+                    "></div>
+                    {%if prof.link != None and prof.link != '' %}
+                    <a href={{prof.link}} target="_blank" >
+                    {%endif%}
+                        <img class="logo-img" src="{{SITE_URL}}{{prof.logo.url}}" alt="">
+                    {% if prof.link != None or prof.link != ''%}
+                        </a>
+                    {%endif%}
                     
             </div>
             `);

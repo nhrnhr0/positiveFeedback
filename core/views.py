@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 
 from core.models import Campain, Proof
 
@@ -18,7 +18,7 @@ def testIndexView(request):
 
 
 from .forms import CampainForm, ProfForm
-def profileView(request):
+def profileView(request, reviewToEdit=-1):
     if request.user.is_anonymous:
         return redirect('/accounts/login')
 
@@ -101,14 +101,23 @@ def campainView(request, id=-1):
             campain = campainForm.save(commit=False)
             campain.owner = request.user
             campainForm.save()
-            messages.add_message(request, messages.SUCCESS, 'campain added')
+            if camp == None:
+                messages.add_message(request, messages.SUCCESS, 'campain added')
+            else:
+                messages.add_message(request, messages.SUCCESS, 'campain edited')
 
             # load profs for the campain
             campainProfs = [i for i in request.POST if i.startswith('profs-checkbox-')]
             campainProfs = map(lambda i: i.replace('profs-checkbox-',''),campainProfs)
             campain.proofs.set(campainProfs)
+
+            if 'save' in request.POST:
+                return redirect('/accounts/profile#campain')
+            elif 'saveContinue' in request.POST:
+                return redirect('/campain/' + str(campainForm.instance.id))
+                return HttpResponseRedirect(request.path_info)
             print('redirecting')
-            return redirect('/accounts/profile#campain')
+            
     else:
         # send edit campain
         if camp and camp.owner == request.user:

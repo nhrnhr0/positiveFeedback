@@ -30,7 +30,8 @@ ALLOWED_HOSTS = ['3.133.203.236','127.0.0.1']
 
 
 # Application definition
-SITE_URL = 'http://3.133.203.236' # this will reduce the Sites framework db call.
+#SITE_URL = 'http://3.133.203.236' # this will reduce the Sites framework db call.
+SITE_URL = 'http://127.0.0.1:8000'
 
 INSTALLED_APPS = [
     #system
