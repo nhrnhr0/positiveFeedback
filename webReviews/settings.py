@@ -51,6 +51,7 @@ INSTALLED_APPS = [
 
     #own:
     'core',
+    'subscriptions',
 ]
 
 # allauth settings:

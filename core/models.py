@@ -98,3 +98,4 @@ class Campain(models.Model):
     customCSS = models.TextField(verbose_name="custom css", blank=True)
 
     proofs = models.ManyToManyField(to=Proof, related_name='camp')
+

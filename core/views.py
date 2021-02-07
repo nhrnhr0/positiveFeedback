@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from core.models import Campain, Proof
 
-
+from subscriptions.models import SubPlant
 
 # Create your views here.
 def generateReview(reuqest, id):
@@ -16,7 +16,7 @@ def generateReview(reuqest, id):
 def testIndexView(request):
     return render(request, 'index.html' , {})
 
-
+from subscriptions.models import Subscription
 from .forms import CampainForm, ProfForm
 def profileView(request, reviewToEdit=-1):
     if request.user.is_anonymous:
@@ -26,11 +26,14 @@ def profileView(request, reviewToEdit=-1):
     campains = Campain.objects.filter(owner=request.user)
     proofs = Proof.objects.filter(owner=request.user)
     profForm = ProfForm()
-    
+    plants = SubPlant.objects.all()
+    activeSubscription = Subscription.objects.get(user=request.user)
 
     return render(request, 'account/profile.html', {'campains': campains,
                                                     'proofs':proofs,
-                                                    'profForm':profForm},)
+                                                    'profForm':profForm,
+                                                    'plants': plants,
+                                                    'activeSubscription':activeSubscription},)
 
 from django.contrib import messages
 from django.shortcuts import redirect
@@ -96,10 +99,17 @@ def campainView(request, id=-1):
 
     if request.method == 'POST':
         # save campain
-        campainForm = CampainForm(request.POST,instance=camp)
+        campainForm = CampainForm(request.POST,instance=camp, user=request.user)
         if campainForm.is_valid():
             campain = campainForm.save(commit=False)
             campain.owner = request.user
+
+            userSubscriptionPlan = Subscription.objects.get(user=request.user).plant.domain
+            activeDomains = Campain.objects.filter(owner=request.user, isActive=True).count()
+            if campain.isActive and userSubscriptionPlan <= activeDomains:
+                messages.add_message(request, messages.ERROR, 'upgrade your package to activate this campain')
+                campain.isActive = False
+
             campainForm.save()
             if camp == None:
                 messages.add_message(request, messages.SUCCESS, 'campain added')
@@ -121,7 +131,7 @@ def campainView(request, id=-1):
     else:
         # send edit campain
         if camp and camp.owner == request.user:
-            campainForm = CampainForm(instance=camp)
+            campainForm = CampainForm(instance=camp, user=request.user)
         # send new campain
         else:
             campainForm = CampainForm()

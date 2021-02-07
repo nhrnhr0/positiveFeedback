@@ -139,8 +139,99 @@
       </div>
       
       <div id="Account" class="tabcontent">
-        <h3>Tokyo</h3>
-        <p>Tokyo is the capital of Japan.</p>
+        <h3>Account</h3>
+
+        
+
+        <div class="wrapper-card">
+            {%for plant in plants.all%}
+
+                <div class="card">
+                    {%if activeSubscription.plant == plant %}
+                        <div class="card-ribbon">
+                            <span>Active</span>
+                        </div>
+                    {%endif%}
+
+                    <div class="card-title">
+                        <h3>{{plant.name}}</h3>
+                        
+                    </div>
+                    <div class="card-price">
+                        <h1>
+                            <sup>&dollar;</sup>
+                            {{plant.price}}
+                            <small>month</small>
+                        </h1>
+                    </div>
+                    <div class="card-description">
+                        <ul>
+                            <li>{{plant.domain}} domains </li>
+                            {%for feature in plant.features.all %}
+                                <li>{{feature.title}}</li>
+                            {%endfor%}
+                        </ul>
+                    </div>
+                    <div class="card-action">
+                        <button type="button">Get {{plant.name}}</button>
+                        
+                    </div>
+                </div>
+                {%endfor%}
+            <!--
+            <div class="card popular">
+                <div class="card-ribbon">
+                    <span>most popular</span>
+                </div>
+                <div class="card-title">
+                    <h3>Pro</h3>
+                    <h4>Maecenas ut justo molestie, pharetra arcu ac, mollis est.</h4>
+                </div>
+                <div class="card-price">
+                    <h1>
+                        <sup>&dollar;</sup>
+                        15
+                        <small>month</small>
+                    </h1>
+                </div>
+                <div class="card-description">
+                    <ul>
+                        <li>Lorem ipsum dolor sit amet</li>
+                        <li>Pellentesque hendrerit</li>
+                        <li>Aliquam at orci aliquam</li>
+                        <li>Praesent non sapien laoreet</li>
+                    </ul>
+                </div>
+                <div class="card-action">
+                    <button type="button">Get Pro</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">
+                    <h3>Premium</h3>
+                    <h4>Duis quis sem auctor, convallis felis vitae, placerat sapien.</h4>
+                </div>
+                <div class="card-price">
+                    <h1>
+                        <sup>&dollar;</sup>
+                        20
+                        <small>month</small>
+                    </h1>
+                </div>
+                <div class="card-description">
+                    <ul>
+                        <li>Lorem ipsum dolor sit amet</li>
+                        <li>Pellentesque hendrerit</li>
+                        <li>Aliquam at orci aliquam</li>
+                        <li>Praesent non sapien laoreet</li>
+                    </ul>
+                </div>
+                <div class="card-action">
+                    <button type="button">Get Premium</button>
+                </div>
+            </div>
+            -->
+        </div>
       </div>
 {%endblock%}
 
