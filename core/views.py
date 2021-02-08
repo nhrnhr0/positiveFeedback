@@ -27,7 +27,7 @@ def profileView(request, reviewToEdit=-1):
     proofs = Proof.objects.filter(owner=request.user)
     profForm = ProfForm()
     plants = SubPlant.objects.all()
-    activeSubscription = Subscription.objects.get(user=request.user)
+    activeSubscription = Subscription.objects.filter(user=request.user, isActive=True)
 
     return render(request, 'account/profile.html', {'campains': campains,
                                                     'proofs':proofs,
@@ -127,6 +127,8 @@ def campainView(request, id=-1):
                 return redirect('/campain/' + str(campainForm.instance.id))
                 return HttpResponseRedirect(request.path_info)
             print('redirecting')
+        else:
+            print(campainForm.errors)
             
     else:
         # send edit campain
@@ -134,7 +136,7 @@ def campainView(request, id=-1):
             campainForm = CampainForm(instance=camp, user=request.user)
         # send new campain
         else:
-            campainForm = CampainForm()
+            campainForm = CampainForm(user=request.user)
         
         profs = Proof.objects.filter(owner= request.user)
         return render(request, 'campains.html', {'campainForm':campainForm,

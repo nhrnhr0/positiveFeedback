@@ -18,7 +18,7 @@ from django.urls import path, include
 from core.views import testIndexView,generateReview ,profileView, campainView,delCampainView, profView, addProf,delProfView
 from django.conf import settings
 from django.conf.urls.static import static
-
+from subscriptions.views import change_user_plan
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('test', testIndexView),
@@ -31,7 +31,8 @@ urlpatterns = [
     path('campain/del/<int:id>/', delCampainView),
     #path('prof/', profView),
     path('prof/del/<int:id>/', delProfView),
-    path('addProf', addProf)
+    path('addProf', addProf),
+    path('change_user_plan', change_user_plan),
 ]
 if settings.DEBUG:
     urlpatterns= urlpatterns + static(settings.MEDIA_URL, document_root= settings.MEDIA_ROOT)

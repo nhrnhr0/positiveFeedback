@@ -1,5 +1,3 @@
-
-
 {% extends "account/base.html" %}
 
 {% load i18n %}
@@ -8,177 +6,203 @@
 
 {% block head_title %}{% trans "Profile" %}{% endblock %}
 {% block extra_head %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
-    <link rel="stylesheet" href="{%static 'css/account/profile.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+<link rel="stylesheet" href="{%static 'css/account/profile.css' %}">
 {% endblock %}
 
 
 {% block content %}
-    <h1>Welcome {{ user }}.</h1>
-    <img src="{{ user.get_avatar_url }}" />
+<h1>Welcome {{ user }}.</h1>
+<img src="{{ user.get_avatar_url }}" />
 
 
-    <div class="tab">
-        <button class="tablinks" name="tab_campains" onclick="openTab(event, 'Campains')" id="defaultOpen">Campains</button>
-        <button class="tablinks" name="tab_reviews" onclick="openTab(event, 'Reviews')">Reviews</button>
-        <button class="tablinks" name="tab_account" onclick="openTab(event, 'Account')">Account</button>
+<div class="tab">
+    <button class="tablinks" name="tab_campains" onclick="openTab(event, 'Campains')" id="defaultOpen">Campains</button>
+    <button class="tablinks" name="tab_reviews" onclick="openTab(event, 'Reviews')">Reviews</button>
+    <button class="tablinks" name="tab_account" onclick="openTab(event, 'Account')">Account</button>
+</div>
+
+<div id="Campains" class="tabcontent">
+    <h3>Campains</h3>
+    <table id="campainsTable">
+        <thead>
+            <tr>
+                <td>Uid</td>
+                <td>Name</td>
+                <td>Domain</td>
+                <td>Active</td>
+                <td>reviews</td>
+                <td>code</td>
+                <td><input type='button' value='new' class="btn" onclick="document.location.href='/campain/'" /></td>
+            </tr>
+        </thead>
+        <tbody>
+            {%for camp in campains.all %}
+            <tr>
+                <td>
+                    {{camp.id}}
+                </td>
+                <td>
+                    {{camp.name}}
+                </td>
+                <td>
+                    {{camp.url}}
+                </td>
+                <td>
+                    {{camp.isActive}}
+                </td>
+                <td>
+                    {{camp.proofs.count}}
+                </td>
+                <td>
+                    <code>&lt;script type="text/javascript"
+                        src="{{ SITE_URL }}/load-campain/{{camp.id}}"&gt;&lt;/script&gt;</code>
+                </td>
+                <td>
+                    <input type='button' value='edit' class="btn"
+                        onclick="document.location.href='/campain/{{camp.id}}'" />
+                    <input type='button' value='delete' class="btn" onclick="deleteCampain({{camp.id}})" /> <!-- '" -->
+                </td>
+
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+</div>
+<div id="deleteModal" class="modal">
+    <div>
+        Are you sure you want to delete?
+    </div>
+    <div>
+        <button onclick="document.location.href=document.getElementById('deleteModal').dataset.delurl;"
+            id="deleteYES">YES</button>
+        <button onclick="$.modal.close();" id="deleteNO">NO</button>
     </div>
 
-    <div id="Campains" class="tabcontent">
-        <h3>Campains</h3>
-        <table id="campainsTable">
-            <thead>
-                <tr>
-                    <td>Uid</td>
-                    <td>Name</td>
-                    <td>Domain</td>
-                    <td>Active</td>
-                    <td>reviews</td>
-                    <td>code</td>
-                    <td><input type='button'value='new' class="btn" onclick="document.location.href='/campain/'" /></td>
-                </tr>
-            </thead>
-            <tbody>
-                {%for camp in campains.all %}
-                    <tr>
-                        <td>
-                            {{camp.id}}
-                        </td>
-                        <td>
-                            {{camp.name}}
-                        </td>
-                        <td>
-                            {{camp.url}}
-                        </td>
-                        <td>
-                            {{camp.isActive}}
-                        </td>
-                        <td>
-                            {{camp.proofs.count}}
-                        </td>
-                        <td>
-                            <code>&lt;script type="text/javascript" src="{{ SITE_URL }}/load-campain/{{camp.id}}"&gt;&lt;/script&gt;</code>
-                        </td>
-                        <td>
-                            <input type='button'value='edit' class="btn" onclick="document.location.href='/campain/{{camp.id}}'" />
-                            <input type='button'value='delete' class="btn" onclick="deleteCampain({{camp.id}})"  /> <!-- '" -->
-                        </td>
+</div>
+<div id="Reviews" class="tabcontent">
+    <h3>Reviews</h3>
+    <div id="addProfModel" class="modal">
+        <form method="POST" action="/addProf" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="id">
+            <img class="prof-table-image" id="displayImage" src="">
+            <img class="prof-table-image-logo" id="displayImageLogo" src="">
+            {{profForm.as_p}}
+            <input type="submit" value="SAVE">
+            <button onclick="closeProfModal(event)">close</button>
+        </form>
+    </div>
 
-                    </tr>
-                {%endfor%}
-            </tbody>
-        </table>
-      </div>
-      <div id="deleteModal" class="modal" >
-          <div>
-              Are you sure you want to delete?
-          </div>
-          <div>
-              <button onclick="document.location.href=document.getElementById('deleteModal').dataset.delurl;" id="deleteYES">YES</button>
-              <button onclick="$.modal.close();" id="deleteNO" >NO</button>
-          </div>
 
-      </div>
-      <div id="Reviews" class="tabcontent">
-        <h3>Reviews</h3>
-        <div id="addProfModel" class="modal">
-            <form method="POST" action="/addProf" enctype="multipart/form-data">
-                {% csrf_token %}
-                <input type="hidden" name="id">
-                <img class="prof-table-image" id="displayImage" src="">
-                <img class="prof-table-image-logo" id="displayImageLogo" src="">
-                {{profForm.as_p}}
-                <input type="submit" value="SAVE">
-                <button onclick="closeProfModal(event)">close</button>
-            </form>
+    <table id="reviewsTable">
+        <thead>
+            <tr>
+                <td>Uid</td>
+                <td>image</td>
+                <td>title</td>
+                <td>time</td>
+                <td>message</td>
+                <td>
+                    <input type='button' value='new' class="btn" onclick="fillAndOpenProfModel();" />
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            {%for prof in proofs.all %}
+            <tr>
+                <td>
+                    {{prof.id}}
+                </td>
+                <td>
+                    <img class="prof-table-image" src="{% if prof.image %}{{prof.image.url}}{% endif %}">
+                </td>
+                <td>
+                    {{prof.title}}
+                </td>
+                <td>
+                    {{prof.time}}
+                </td>
+                <td>
+                    {{prof.message}}
+                </td>
+                <td>
+                    <input name="profEdit{{prof.id}}" type='button' value='edit' class="btn"
+                        onclick="fillAndOpenProfModel('{{prof.id}}', '{% if prof.image %}{{prof.image.url}}{%endif%}','{{prof.title}}','{{prof.time}}', '{{prof.message}}', {{prof.stars}}, '{{prof.link}}','{% if prof.logo %}{{prof.logo.url}}{%endif%}' );" />
+                    <input type='button' value='delete' class="btn" onclick="deleteProf({{prof.id}})" />
+                </td>
+
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+
+</div>
+
+<div id="Account" class="tabcontent">
+    <h3>Account</h3>
+    {%for sub in activeSubscription %}
+        <div>
+            <div>
+                Name: {{sub.plant}}
+            </div>
+            <div>
+                From: {{sub.start_time}}
+            </div>
+            <div>
+                To: {{sub.end_time}}
+            </div>
+            <div>
+                Auto-renew: {{ sub.isCanceled|yesno:"False,True" }}
+            </div>
         </div>
+    {%endfor%}
 
-
-        <table id="reviewsTable">
-            <thead>
-                <tr>
-                    <td>Uid</td>
-                    <td>image</td>
-                    <td>title</td>
-                    <td>time</td>
-                    <td>message</td>
-                    <td>
-                        <input type='button'value='new' class="btn" onclick="fillAndOpenProfModel();" />
-                    </td>
-                </tr>
-            </thead>
-            <tbody>
-                {%for prof in proofs.all %}
-                    <tr>
-                        <td>
-                            {{prof.id}}
-                        </td>
-                        <td>
-                            <img class="prof-table-image" 
-                            src="{% if prof.image %}{{prof.image.url}}{% endif %}">
-                        </td>
-                        <td>
-                            {{prof.title}}
-                        </td>
-                        <td>
-                            {{prof.time}}
-                        </td>
-                        <td>
-                            {{prof.message}}
-                        </td>
-                        <td>
-                            <input name="profEdit{{prof.id}}" type='button'value='edit' class="btn" onclick="fillAndOpenProfModel('{{prof.id}}', '{% if prof.image %}{{prof.image.url}}{%endif%}','{{prof.title}}','{{prof.time}}', '{{prof.message}}', {{prof.stars}}, '{{prof.link}}','{% if prof.logo %}{{prof.logo.url}}{%endif%}' );" />
-                            <input type='button'value='delete' class="btn" onclick="deleteProf({{prof.id}})" />
-                        </td>
-
-                    </tr>
-                {%endfor%}
-            </tbody>
-        </table>
-
-      </div>
-      
-      <div id="Account" class="tabcontent">
-        <h3>Account</h3>
-
-        
-
+    <form action="/change_user_plan" method="POST">
+        {%csrf_token%}
         <div class="wrapper-card">
             {%for plant in plants.all%}
+            {%if plant.name == "Trail" %}
 
-                <div class="card">
-                    {%if activeSubscription.plant == plant %}
-                        <div class="card-ribbon">
-                            <span>Active</span>
-                        </div>
-                    {%endif%}
-
-                    <div class="card-title">
-                        <h3>{{plant.name}}</h3>
-                        
-                    </div>
-                    <div class="card-price">
-                        <h1>
-                            <sup>&dollar;</sup>
-                            {{plant.price}}
-                            <small>month</small>
-                        </h1>
-                    </div>
-                    <div class="card-description">
-                        <ul>
-                            <li>{{plant.domain}} domains </li>
-                            {%for feature in plant.features.all %}
-                                <li>{{feature.title}}</li>
-                            {%endfor%}
-                        </ul>
-                    </div>
-                    <div class="card-action">
-                        <button type="button">Get {{plant.name}}</button>
-                        
-                    </div>
+            {%else %}
+            <div class="card">
+                {%if activeSubscription.plant == plant %}
+                <div class="card-ribbon">
+                    <span>Active</span>
                 </div>
-                {%endfor%}
-            <!--
+                {%endif%}
+
+                <div class="card-title">
+                    <h3>{{plant.name}}</h3>
+
+                </div>
+                <div class="card-price">
+                    <h1>
+                        <sup>&dollar;</sup>
+                        {{plant.price}}
+                        <small>month</small>
+                    </h1>
+                </div>
+                <div class="card-description">
+                    <ul>
+                        <li>{{plant.domain}} domains </li>
+                        {%for feature in plant.features.all %}
+                        <li>{{feature.title}}</li>
+                        {%endfor%}
+                    </ul>
+                </div>
+                <div class="card-action">
+                    <button type="submit" name="submit" value="{{plant.id}}">Get {{plant.name}}</button>
+
+                </div>
+                {%endif%}
+            </div>
+            {%endfor%}
+
+        </div>
+    </form>
+</div>
+<!--
             <div class="card popular">
                 <div class="card-ribbon">
                     <span>most popular</span>
@@ -231,17 +255,16 @@
                 </div>
             </div>
             -->
-        </div>
-      </div>
+
 {%endblock%}
 
 {% block extra_body %}
-      <!-- JQuery-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
-      
-    <!-- jQuery Modal -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+<!-- JQuery-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
 
-    <!-- OWN -->
-    <script src="{%static 'js/account/profile.js' %}"></script>
+<!-- jQuery Modal -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+
+<!-- OWN -->
+<script src="{%static 'js/account/profile.js' %}"></script>
 {% endblock %}

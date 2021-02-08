@@ -1,10 +1,11 @@
 from django.db import models
-from colorfield.fields import ColorField
+#from colorfield.fields import ColorField
 from django.utils.translation import gettext as _
 from django.conf import settings
 
 # Create your models here.
 
+from colorfield.fields import ColorField
 
 class Proof(models.Model):
     owner = models.ForeignKey(
@@ -24,6 +25,19 @@ class Proof(models.Model):
         return self.title
     
     
+
+
+
+'''class ColorField(models.CharField):
+    def __init__(self, *args, **kwargs):
+        kwargs['max_length'] = 10
+        super(ColorField, self).__init__(*args, **kwargs)
+
+    def formfield(self, **kwargs):
+        kwargs['widget'] = ColorPickerWidget
+        return super(ColorField, self).formfield(**kwargs)'''
+    
+
 class Campain(models.Model):
     
     BIG_CIRCLE_IMAGE = '0'
@@ -92,9 +106,13 @@ class Campain(models.Model):
     yOffset = models.CharField(max_length=20, default="20px")
 
 
-    backgroundColor = ColorField(default="#ffffff")
-    headingColor = ColorField(default="#000000")
-    textColor = ColorField(default="#333333")
+    #backgroundColor = ColorField(default="#ffffff")
+    #headingColor = ColorField(default="#000000")
+    #textColor = ColorField(default="#333333")
+    
+    backgroundColor =models.TextField(default="#ffffff")
+    headingColor = models.TextField(default="#000000")
+    textColor = models.TextField(default="#333333")
     customCSS = models.TextField(verbose_name="custom css", blank=True)
 
     proofs = models.ManyToManyField(to=Proof, related_name='camp')

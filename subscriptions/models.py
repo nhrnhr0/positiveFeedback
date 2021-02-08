@@ -30,5 +30,11 @@ class Subscription(models.Model):
     def save(self, *args, **kwargs):
         if not self.id:
             self.created_at = timezone.now()
-        last_updated_on = timezone.now()
-        return super(Subscription, self).save(args, kwargs)
+        self.last_updated_on = timezone.now()
+        return super(Subscription, self).save(*args, **kwargs)
+
+from django.contrib.auth.models import User
+
+#class Profile(models.Model):
+#    user = models.OneToOneField(to=User, on_delete=models.CASCADE)
+
