@@ -27,7 +27,6 @@
     <table id="campainsTable">
         <thead>
             <tr>
-                <td>Uid</td>
                 <td>Name</td>
                 <td>Domain</td>
                 <td>Active</td>
@@ -39,9 +38,6 @@
         <tbody>
             {%for camp in campains.all %}
             <tr>
-                <td>
-                    {{camp.id}}
-                </td>
                 <td>
                     {{camp.name}}
                 </td>
@@ -98,7 +94,6 @@
     <table id="reviewsTable">
         <thead>
             <tr>
-                <td>Uid</td>
                 <td>image</td>
                 <td>title</td>
                 <td>time</td>
@@ -111,9 +106,6 @@
         <tbody>
             {%for prof in proofs.all %}
             <tr>
-                <td>
-                    {{prof.id}}
-                </td>
                 <td>
                     <img class="prof-table-image" src="{% if prof.image %}{{prof.image.url}}{% endif %}">
                 </td>

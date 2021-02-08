@@ -8,10 +8,11 @@ from django.forms.widgets import TextInput
 from colorfield.fields import ColorField
 class CampainForm(ModelForm):
     
-    def __init__(self, user, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user',None)
+        #self.user = user
+        print(self.user)
         super(CampainForm, self).__init__(*args, **kwargs)
-        self.user = user
         if Subscription.objects.get(user=self.user, isActive=True).plant.name == 'starter' or \
             Subscription.objects.get(user=self.user, isActive=True).plant.name == 'Trail':
             #self.fields['position'].widget.attrs['readonly'] = True
