@@ -107,7 +107,7 @@ def campainView(request, id=-1):
             userSubscriptionPlan = Subscription.objects.filter(user=request.user, isActive=True).first().plant.domain
             activeDomains = Campain.objects.filter(owner=request.user, isActive=True).count()
             if campain.isActive and userSubscriptionPlan <= activeDomains:
-                messages.add_message(request, messages.ERROR, 'upgrade your package to activate this campain')
+                messages.add_message(request, messages.WARNING, 'upgrade your package to activate this campain')
                 campain.isActive = False
 
             campainForm.save()
