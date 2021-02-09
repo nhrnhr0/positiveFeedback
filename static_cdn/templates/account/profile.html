@@ -12,72 +12,105 @@
 
 
 {% block content %}
+
+
+
 <h1>Welcome {{ user }}.</h1>
 <img src="{{ user.get_avatar_url }}" />
 
-
-<div class="tab">
-    <button class="tablinks" name="tab_campains" onclick="openTab(event, 'Campains')" id="defaultOpen">Campains</button>
-    <button class="tablinks" name="tab_reviews" onclick="openTab(event, 'Reviews')">Reviews</button>
-    <button class="tablinks" name="tab_account" onclick="openTab(event, 'Account')">Account</button>
-</div>
-
-<div id="Campains" class="tabcontent">
-    <h3>Campains</h3>
-    <table id="campainsTable">
-        <thead>
-            <tr>
-                <td>Name</td>
-                <td>Domain</td>
-                <td>Active</td>
-                <td>reviews</td>
-                <td>code</td>
-                <td><input type='button' value='new' class="btn" onclick="document.location.href='/campain/'" /></td>
-            </tr>
-        </thead>
-        <tbody>
-            {%for camp in campains.all %}
-            <tr>
-                <td>
-                    {{camp.name}}
-                </td>
-                <td>
-                    {{camp.url}}
-                </td>
-                <td>
-                    {{camp.isActive}}
-                </td>
-                <td>
-                    {{camp.proofs.count}}
-                </td>
-                <td>
-                    <code>&lt;script type="text/javascript"
-                        src="{{ SITE_URL }}/load-campain/{{camp.id}}"&gt;&lt;/script&gt;</code>
-                </td>
-                <td>
-                    <input type='button' value='edit' class="btn"
-                        onclick="document.location.href='/campain/{{camp.id}}'" />
-                    <input type='button' value='delete' class="btn" onclick="deleteCampain({{camp.id}})" /> <!-- '" -->
-                </td>
-
-            </tr>
-            {%endfor%}
-        </tbody>
-    </table>
-</div>
 <div id="deleteModal" class="modal">
     <div>
         Are you sure you want to delete?
     </div>
     <div>
         <button onclick="document.location.href=document.getElementById('deleteModal').dataset.delurl;"
-            id="deleteYES">YES</button>
-        <button onclick="$.modal.close();" id="deleteNO">NO</button>
+            id="deleteYES"><i class="fas fa-thumbs-up"></i>YES</button>
+        <button onclick="$.modal.close();" id="deleteNO"><i class="fas fa-thumbs-down"></i>NO</button>
     </div>
-
 </div>
+
+
+
+<div class="tab">
+    <button class="tablinks" name="tab_all" onclick="openTab(event, 'All')">All</button>
+    <button class="tablinks" name="tab_campains" onclick="openTab(event, 'Campains')" id="defaultOpen">Campains</button>
+    <button class="tablinks" name="tab_reviews" onclick="openTab(event, 'Reviews')">Reviews</button>
+    <button class="tablinks" name="tab_account" onclick="openTab(event, 'Account')">Account</button>
+</div>
+
+
+
+<div id="Campains" class="tabcontent">
+    <h3 class="tabtitle">Campains</h3>
+    <div class="table-container">
+        <table id="campainsTable">
+            <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>Domain</td>
+                    <td>Active</td>
+                    <td>reviews</td>
+                    <td>code</td>
+                    <td>
+                        <button class="btn btn-success" onclick="document.location.href='/campain/'">
+                            <i class="fas fa-plus fa-2x">
+                            </i>
+                        </button>
+
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                {%for camp in campains.all %}
+                <tr>
+                    <td>
+                        {{camp.name}}
+                    </td>
+                    <td>
+                        <a href="{{camp.url}}">{{camp.url}}</a>
+                    </td>
+                    <td>
+                        {% if camp.isActive %}
+                        <i class="fa fa-check-circle" style="color:green;" aria-hidden="true"></i>
+                        {%else%}
+                        <i class="fa fa-times-circle" style="color:red;" aria-hidden="true"></i>
+                        {%endif%}
+                    </td>
+                    <td>
+                        {{camp.proofs.count}}
+                    </td>
+                    <td>
+                        <code>&lt;script type="text/javascript"
+                            src="{{ SITE_URL }}/load-campain/{{camp.id}}"&gt;&lt;/script&gt;</code>
+                    </td>
+                    <td>
+                        <button value='edit' class="btn" style="color: green;"
+                            onclick="document.location.href='/campain/{{camp.id}}'">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <!--
+                        <button type="button" class="btn" data-toggle="modal" data-target="#deleteCampainModal"
+                         data-id="{{camp.id}}">
+                         <i class="fas fa-trash-alt"></i>
+                        </button>
+                        -->
+
+                        <button value='delete' class="btn" style="color:red;" onclick="deleteCampain({{camp.id}})">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+
+                        <!-- '" -->
+                    </td>
+
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+
 <div id="Reviews" class="tabcontent">
-    <h3>Reviews</h3>
+    <h3 class="tabtitle">Reviews</h3>
     <div id="addProfModel" class="modal">
         <form method="POST" action="/addProf" enctype="multipart/form-data">
             {% csrf_token %}
@@ -99,7 +132,10 @@
                 <td>time</td>
                 <td>message</td>
                 <td>
-                    <input type='button' value='new' class="btn" onclick="fillAndOpenProfModel();" />
+                    <button class="btn btn-success" onclick="fillAndOpenProfModel();">
+                        <i class="fas fa-plus fa-2x">
+                        </i>
+                    </button>
                 </td>
             </tr>
         </thead>
@@ -119,9 +155,21 @@
                     {{prof.message}}
                 </td>
                 <td>
+                    <button value='edit' class="btn" style="color: green;"
+                        onclick="fillAndOpenProfModel('{{prof.id}}', '{% if prof.image %}{{prof.image.url}}{%endif%}','{{prof.title}}','{{prof.time}}', '{{prof.message}}', {{prof.stars}}, '{{prof.link}}','{% if prof.logo %}{{prof.logo.url}}{%endif%}' );">
+                        <i class="fas fa-edit"></i>
+                    </button>
+
+                    <button value='delete' class="btn" style="color:red;" onclick="deleteProf({{prof.id}})">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+
+
+                    <!--
                     <input name="profEdit{{prof.id}}" type='button' value='edit' class="btn"
                         onclick="fillAndOpenProfModel('{{prof.id}}', '{% if prof.image %}{{prof.image.url}}{%endif%}','{{prof.title}}','{{prof.time}}', '{{prof.message}}', {{prof.stars}}, '{{prof.link}}','{% if prof.logo %}{{prof.logo.url}}{%endif%}' );" />
                     <input type='button' value='delete' class="btn" onclick="deleteProf({{prof.id}})" />
+                    -->
                 </td>
 
             </tr>
@@ -132,22 +180,22 @@
 </div>
 
 <div id="Account" class="tabcontent">
-    <h3>Account</h3>
+    <h3 class="tabtitle">Account</h3>
     {%for sub in activeSubscription %}
+    <div>
         <div>
-            <div>
-                Name: {{sub.plant}}
-            </div>
-            <div>
-                From: {{sub.start_time}}
-            </div>
-            <div>
-                To: {{sub.end_time}}
-            </div>
-            <div>
-                Auto-renew: {{ sub.isCanceled|yesno:"False,True" }}
-            </div>
+            Name: {{sub.plant}}
         </div>
+        <div>
+            From: {{sub.start_time}}
+        </div>
+        <div>
+            To: {{sub.end_time}}
+        </div>
+        <div>
+            Auto-renew: {{ sub.isCanceled|yesno:"False,True" }}
+        </div>
+    </div>
     {%endfor%}
 
     <form action="/change_user_plan" method="POST">
@@ -250,12 +298,11 @@
 
 {%endblock%}
 
-{% block extra_body %}
-<!-- JQuery-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
 
+{% block extra_body %}
 <!-- jQuery Modal -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+
 
 <!-- OWN -->
 <script src="{%static 'js/account/profile.js' %}"></script>

@@ -12,7 +12,6 @@ function getParameterByName(name, url = window.location.href) {
 }
 
 function openTab(evt, tabId) {
-  debugger;
     window.location.hash = tabId;
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
@@ -23,9 +22,17 @@ function openTab(evt, tabId) {
     for (i = 0; i < tablinks.length; i++) {
       tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
-    document.getElementById(tabId).style.display = "block";
-    //evt.currentTarget.className += " active";
-    evt.target.className += " active";
+    if(tabId == 'All') {
+        tablinks[0].className = tablinks[0].className += " active"
+        for (i = 0; i < tabcontent.length; i++) {
+          tabcontent[i].style.display = "block";
+        }
+    }
+    else {
+      document.getElementById(tabId).style.display = "block";
+      //evt.currentTarget.className += " active";
+      evt.target.className += " active";
+    }
   }
   
   //document.getElementById("defaultOpen").click();
@@ -34,9 +41,9 @@ function openTab(evt, tabId) {
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// campain modal functionality ////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
-$('#btnNewCampin').on('click', ()=> {
+/*$('#btnNewCampin').on('click', ()=> {
     $('#newCampain').modal();
-});
+});*/
 
 
 function readProfImage(input, selector) {
@@ -53,7 +60,6 @@ function readProfImage(input, selector) {
 
 function fillAndOpenProfModel(id=-1, image='', title='', time='', message='', stars=4.5, link='', logo=''){
            console.log(id, image, title, time, message);
-           debugger;
            $(`[name=id]`).val(id);
            $(`#id_title`).val(title);
            $(`#id_time`).val(time);
@@ -93,7 +99,6 @@ function closeProfModal(e) {
 
 var profModal;
 $( document ).ready(function() {
-  debugger;
   profModal = $('#addProfModel');
   hash = window.location.hash.substring(1);
   var tabBtn = $(`[name=tab_${hash}`);
@@ -102,7 +107,6 @@ $( document ).ready(function() {
   let params = new URLSearchParams(document.location.search.substring(1));
   reviewToEdit=params.get("review");//getParameterByName('review');
   console.log(reviewToEdit);
-  debugger;
   if(reviewToEdit != -1 && reviewToEdit != null) {
     history.replaceState(null, "", location.href.split("?")[0] + '#Reviews');
     $(`[name=profEdit${reviewToEdit}]`).click();

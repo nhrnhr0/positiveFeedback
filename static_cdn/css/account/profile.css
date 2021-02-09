@@ -1,11 +1,25 @@
 /*.modal {
     position: absolute;
 }*/
+.btn {
+  border: none;
+  background: transparent;
+  padding: 0.4em;
+}
+
+.btn:hover {
+  border: 0.5px solid black;
+}
+
+.btn-success {
+  color: green;
+}
+
 .tab {
   float: left;
   border: 1px solid #ccc;
   background-color: #f1f1f1;
-  width: 29%;
+  width: 19%;
   height: 300px;
 }
 
@@ -35,9 +49,20 @@
 .tabcontent {
   float: right;
   border: 1px solid #ccc;
-  width: 70%;
+  width: 80%;
   border-left: none;
   min-height: 300px;
+}
+
+.tabcontent .tabtitle {
+  background-color: beige;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.tabcontent .table-container {
+  overflow-x: auto;
 }
 
 #campainsTable {

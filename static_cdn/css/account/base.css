@@ -1,1 +1,17 @@
-/* No CSS *//*# sourceMappingURL=base.css.map */
+.messages-container {
+  padding-top: 20px;
+}
+
+.alert {
+  padding-left: 20px;
+  border-radius: 10px;
+}
+
+.alert-warning {
+  background: #ff8c72;
+}
+
+.alert-success {
+  background: lightgreen;
+}
+/*# sourceMappingURL=base.css.map */
