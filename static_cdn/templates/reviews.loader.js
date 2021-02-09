@@ -437,35 +437,37 @@ const reviewsHideTime = {{campain.hideTime}};
 var reviewsAllImages = [] // use for preload iamges
 
 var proofsHtml = []; 
-{%for prof in campain.proofs.all %}
-    var img=new Image();
-    img.src="{{ SITE_URL }}{{prof.image.url}}"
-    proofsHtml.push(`
-                <div id="reviews-proof-hidden-{{prof.id}}" style="background:url({{ SITE_URL }}{{prof.image.url}}) no-repeat -9999px -9999px;"></div>
-                <div class="reviews-proof-img">
-                    <img src="{{ SITE_URL }}{{prof.image.url}}"
-                        alt="">
+{%if campain.isActive %}
+    {%for prof in campain.proofs.all %}
+        var img=new Image();
+        img.src="{{ SITE_URL }}{{prof.image.url}}"
+        proofsHtml.push(`
+                    <div id="reviews-proof-hidden-{{prof.id}}" style="background:url({{ SITE_URL }}{{prof.image.url}}) no-repeat -9999px -9999px;"></div>
+                    <div class="reviews-proof-img">
+                        <img src="{{ SITE_URL }}{{prof.image.url}}"
+                            alt="">
+                    </div>
+                    <div class="reviews-proof-text"><span id="close-proofs" class="close">X</span>
+                        <h3>{{prof.title}}</h3>
+                        <h4>{{prof.message}}</h4>
+                        <h5>{{prof.time}}</h5>
+                        <div class="Stars" style="--rating: {{prof.starts}};
+                        {%if prof.starts == -1%}
+                            display:none;
+                        {%endif%}
+                        "></div>
+                        {%if prof.link != None and prof.link != '' %}
+                        <a href={{prof.link}} target="_blank" >
+                        {%endif%}
+                            <img class="logo-img" src="{{SITE_URL}}{{prof.logo.url}}" alt="">
+                        {% if prof.link != None or prof.link != ''%}
+                            </a>
+                        {%endif%}
+                        
                 </div>
-                <div class="reviews-proof-text"><span id="close-proofs" class="close">X</span>
-                    <h3>{{prof.title}}</h3>
-                    <h4>{{prof.message}}</h4>
-                    <h5>{{prof.time}}</h5>
-                    <div class="Stars" style="--rating: {{prof.starts}};
-                     {%if prof.starts == -1%}
-                        display:none;
-                    {%endif%}
-                    "></div>
-                    {%if prof.link != None and prof.link != '' %}
-                    <a href={{prof.link}} target="_blank" >
-                    {%endif%}
-                        <img class="logo-img" src="{{SITE_URL}}{{prof.logo.url}}" alt="">
-                    {% if prof.link != None or prof.link != ''%}
-                        </a>
-                    {%endif%}
-                    
-            </div>
-            `);
-{% endfor %}
+                `);
+    {% endfor %}
+{%endif%}
 
 
 initLoop();
@@ -492,6 +494,9 @@ function showProof() {
 
 function initLoop() {
     console.log('init loop');
-    
-    setTimeout(showProof, reviewsStartDelay*1000);
+    {%if campain.isActive %}
+        setTimeout(showProof, reviewsStartDelay*1000);
+    {%else%}
+        console.log('activate your campain to see popups')
+    {%endif%}
 }
