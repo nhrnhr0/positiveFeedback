@@ -2,7 +2,7 @@
 
 from django.forms import ModelForm, FloatField, NumberInput
 from .models import Campain
-from subscriptions.models import Subscription
+
 from django import forms
 from django.forms.widgets import TextInput
 from colorfield.fields import ColorField
@@ -13,8 +13,9 @@ class CampainForm(ModelForm):
         #self.user = user
         print(self.user)
         super(CampainForm, self).__init__(*args, **kwargs)
-        if Subscription.objects.get(user=self.user, isActive=True).plant.name == 'starter' or \
-            Subscription.objects.get(user=self.user, isActive=True).plant.name == 'Trail':
+        #if Subscription.objects.get(user=self.user, isActive=True).plant.name == 'starter' or \
+        #    Subscription.objects.get(user=self.user, isActive=True).plant.name == 'Trail':
+        if False:
             #self.fields['position'].widget.attrs['readonly'] = True
             self.fields['xOffset'].widget.attrs['readonly'] = True
             self.fields['yOffset'].widget.attrs['readonly'] = True

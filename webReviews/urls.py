@@ -14,17 +14,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from core.views import testIndexView,generateReview ,profileView, campainView,delCampainView, profView, addProf,delProfView
 from django.conf import settings
 from django.conf.urls.static import static
-from subscriptions.views import change_user_plan
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('test', testIndexView),
     path('load-campain/<int:id>', generateReview),
     path('accounts/', include('allauth.urls')),
-    path('accounts/profile/', profileView),
+    path('accounts/profile/', profileView, name='user-profile'),
     path('accounts/profile/<int:review>', profileView),
     path('campain/', campainView),
     path('campain/<int:id>', campainView),
@@ -32,7 +31,8 @@ urlpatterns = [
     #path('prof/', profView),
     path('prof/del/<int:id>/', delProfView),
     path('addProf', addProf),
-    path('change_user_plan', change_user_plan),
+    re_path('^paypal/', include('paypal.standard.ipn.urls')),
+    path('payment-cancle', testIndexView,name='payment-cancle-view'),
 ]
 if settings.DEBUG:
     urlpatterns= urlpatterns + static(settings.MEDIA_URL, document_root= settings.MEDIA_ROOT)

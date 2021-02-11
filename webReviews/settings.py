@@ -48,15 +48,24 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'paypal.standard.ipn',
+    #'subscription',
 
     #own:
     'core',
-    'subscriptions',
+    
+    #'subscriptions',
 ]
 
 # allauth settings:
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_EMAIL_REQUIRED =True
+
+# PAYPAL:
+PAYPAL_TEST = True
+PAYPAL_CLIENT_ID = 'AaOd8B2lsCiV1---Rsh_RLVtKYJZHY9KNWqmAy3ODjS8EtXruSZZM8hWR5zKMMFxpibTAGLfSQrUVqu2'
+PAYPAL_CLIENT_SECRET = 'ECswJSjK7PuEq1bnZYR000QycbdvEPNjZrGh8wF67ArHWsrxG9UutnyGKCpFssb3GJzgYLaAPCFGRQi9'
+
 #ACCOUNT_USERNAME_REQUIRED =False
 SITE_ID = 1
 

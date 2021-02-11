@@ -2,8 +2,11 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 
 from core.models import Campain, Proof
+from django.urls import reverse
 
-from subscriptions.models import SubPlant
+from paypal.standard.forms import PayPalPaymentsForm
+
+
 
 # Create your views here.
 def generateReview(reuqest, id):
@@ -16,7 +19,6 @@ def generateReview(reuqest, id):
 def testIndexView(request):
     return render(request, 'index.html' , {})
 
-from subscriptions.models import Subscription
 from .forms import CampainForm, ProfForm
 def profileView(request, reviewToEdit=-1):
     if request.user.is_anonymous:
@@ -26,14 +28,28 @@ def profileView(request, reviewToEdit=-1):
     campains = Campain.objects.filter(owner=request.user)
     proofs = Proof.objects.filter(owner=request.user)
     profForm = ProfForm()
-    plants = SubPlant.objects.all()
-    activeSubscription = Subscription.objects.filter(user=request.user, isActive=True)
+    #plants = SubPlant.objects.all()
+    #activeSubscription = Subscription.objects.filter(user=request.user, isActive=True)
+
+    paypal_dict = {
+        "business": "receiver_email@example.com",
+        "amount": "10000000.00",
+        "item_name": "name of the item",
+        "invoice": "unique-invoice-id",
+        "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
+        "return": request.build_absolute_uri(reverse('user-profile')),
+        "cancel_return": request.build_absolute_uri(reverse('payment-cancle-view')),
+        "custom": "premium_plan",  # Custom command to correlate to some function later (optional)
+    }
+
+    # Create the instance.
+    form = PayPalPaymentsForm(initial=paypal_dict)
 
     return render(request, 'account/profile.html', {'campains': campains,
                                                     'proofs':proofs,
                                                     'profForm':profForm,
-                                                    'plants': plants,
-                                                    'activeSubscription':activeSubscription},)
+                                                    "paypalForm": form
+                                                    },) #'plants': plants,'activeSubscription':activeSubscription
 
 from django.contrib import messages
 from django.shortcuts import redirect
@@ -104,9 +120,10 @@ def campainView(request, id=-1):
             campain = campainForm.save(commit=False)
             campain.owner = request.user
 
-            userSubscriptionPlan = Subscription.objects.filter(user=request.user, isActive=True).first().plant.domain
+            #userSubscriptionPlan = Subscription.objects.filter(user=request.user, isActive=True).first().plant.domain
             activeDomains = Campain.objects.filter(owner=request.user, isActive=True).count()
-            if campain.isActive and userSubscriptionPlan <= activeDomains:
+            #if campain.isActive and userSubscriptionPlan <= activeDomains:
+            if False:
                 messages.add_message(request, messages.WARNING, 'upgrade your package to activate this campain')
                 campain.isActive = False
 

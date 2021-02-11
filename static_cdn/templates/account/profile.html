@@ -181,22 +181,6 @@
 
 <div id="Account" class="tabcontent">
     <h3 class="tabtitle">Account</h3>
-    {%for sub in activeSubscription %}
-    <div>
-        <div>
-            Name: {{sub.plant}}
-        </div>
-        <div>
-            From: {{sub.start_time}}
-        </div>
-        <div>
-            To: {{sub.end_time}}
-        </div>
-        <div>
-            Auto-renew: {{ sub.isCanceled|yesno:"False,True" }}
-        </div>
-    </div>
-    {%endfor%}
 
     <form action="/change_user_plan" method="POST">
         {%csrf_token%}
